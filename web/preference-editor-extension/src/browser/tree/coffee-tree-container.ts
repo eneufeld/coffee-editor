@@ -15,7 +15,6 @@
  */
 import { Command, CommandHandler } from '@theia/core';
 import { ApplicationShell, OpenerService } from '@theia/core/lib/browser';
-import URI from '@theia/core/lib/common/uri';
 import { JsonFormsTree } from 'jsonforms-tree-extension/lib/browser/tree/json-forms-tree';
 
 import { PreferencesTreeEditorWidget } from '../preferences-tree-editor-widget';
@@ -39,8 +38,8 @@ export class OpenWorkflowDiagramCommandHandler implements CommandHandler {
     if (editorWidget) {
       const workflowNode = this.getSelectedWorkflow(editorWidget);
       if (workflowNode) {
-        const notationUri = this.getNotationUri(editorWidget);
-        this.openerService.getOpener(notationUri).then(opener => opener.open(notationUri, this.createServerOptions(workflowNode)));
+        // const notationUri = this.getNotationUri(editorWidget);
+        // this.openerService.getOpener(notationUri).then(opener => opener.open(notationUri, this.createServerOptions(workflowNode)));
       }
     }
   }
@@ -64,11 +63,11 @@ export class OpenWorkflowDiagramCommandHandler implements CommandHandler {
     return undefined;
   }
 
-  getNotationUri(widget: PreferencesTreeEditorWidget): URI {
-    const coffeeUri = widget.uri();
-    const coffeeNotationUri = coffeeUri.parent.resolve(coffeeUri.displayName + 'notation');
-    return coffeeNotationUri;
-  }
+  // getNotationUri(widget: PreferencesTreeEditorWidget): URI {
+  //   const coffeeUri = widget.uri();
+  //   const coffeeNotationUri = coffeeUri.parent.resolve(coffeeUri.displayName + 'notation');
+  //   return coffeeNotationUri;
+  // }
 
   createServerOptions(node: JsonFormsTree.Node) {
     return {

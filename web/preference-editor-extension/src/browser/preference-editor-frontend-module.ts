@@ -15,6 +15,9 @@
  ********************************************************************************/
 import { bindViewContribution, PreferenceProvider, PreferenceScope, WidgetFactory } from '@theia/core/lib/browser';
 import { ContainerModule, interfaces } from 'inversify';
+import { createJsonFormsTreeWidget } from 'jsonforms-tree-extension/lib//browser/util';
+import { JsonFormsTreeEditorWidgetOptions } from 'jsonforms-tree-extension/lib/browser/editor/json-forms-tree-editor-widget';
+import { JsonFormsTreeWidget } from 'jsonforms-tree-extension/lib/browser/tree/json-forms-tree-widget';
 
 import { UserPreferenceProvider } from './duplicate/user-preference-provider';
 import { PreferenceEditorContainer } from './preference-editor-container';
@@ -38,11 +41,30 @@ export function bindPreferences(bind: interfaces.Bind, unbind: interfaces.Unbind
 
     bind(PreferencesTreeNodeFactory).toSelf();
     bind(PreferencesTreeLabelProvider).toSelf();
+    bind(PreferencesTreeEditorWidget).toSelf();
+
     bind(WidgetFactory).toDynamicValue(({ container }) => ({
         id: PreferencesTreeEditorWidget.WIDGET_ID,
-        createWidget: () => container.get(PreferencesTreeEditorWidget)
-        // TODO bind in non conflicting way (see coffee editor)
+        // createWidget: () => container.get(PreferencesTreeEditorWidget)
+        createWidget: () => {
+            const child = container.createChild();
+
+            // Create and bind tree widget only for this editor creation
+            const tree = createJsonFormsTreeWidget(container, PreferencesTreeLabelProvider, PreferencesTreeNodeFactory);
+            child.bind(JsonFormsTreeWidget).toConstantValue(tree);
+
+            child
+                .bind<JsonFormsTreeEditorWidgetOptions>(
+                    JsonFormsTreeEditorWidgetOptions
+                )
+                .toConstantValue({
+                    uri: undefined
+                });
+
+            return child.get(PreferencesTreeEditorWidget);
+        }
     }));
+    // TODO bind in non conflicting way (see coffee editor)
 
     // bind(WidgetFactory).toDynamicValue(({ container }) => ({
     //     id: PreferencesTreeWidget.ID,

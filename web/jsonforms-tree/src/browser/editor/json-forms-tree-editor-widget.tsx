@@ -13,7 +13,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  */
-import { BaseWidget, Message, Navigatable, Saveable, SplitPanel, Widget } from '@theia/core/lib/browser';
+import { BaseWidget, Message, Saveable, SplitPanel, Widget } from '@theia/core/lib/browser';
 import { Emitter, Event, ILogger } from '@theia/core/lib/common';
 import URI from '@theia/core/lib/common/uri';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
@@ -33,7 +33,7 @@ export interface JsonFormsTreeEditorWidgetOptions {
 }
 
 export abstract class JsonFormsTreeEditorWidget extends BaseWidget
-  implements Navigatable, Saveable {
+  implements Saveable {
   public dirty: boolean = false;
   public autoSave: 'off';
   private splitPanel: SplitPanel;
@@ -48,7 +48,7 @@ export abstract class JsonFormsTreeEditorWidget extends BaseWidget
   protected instanceData: any;
 
   constructor(
-    protected readonly options: JsonFormsTreeEditorWidgetOptions,
+    // protected readonly options: JsonFormsTreeEditorWidgetOptions,
     protected readonly treeWidget: JsonFormsTreeWidget,
     protected readonly formWidget: JSONFormsWidget,
     protected readonly workspaceService: WorkspaceService,
@@ -87,9 +87,9 @@ export abstract class JsonFormsTreeEditorWidget extends BaseWidget
 
     this.toDispose.push(this.onDirtyChangedEmitter);
   }
-  public uri(): URI {
-    return this.options.uri;
-  }
+  // public uri(): URI {
+  //   return this.options.uri;
+  // }
 
   protected onResize(_msg: any) {
     if (this.splitPanel) {
@@ -97,20 +97,20 @@ export abstract class JsonFormsTreeEditorWidget extends BaseWidget
     }
   }
 
-  getModelIDToRequest(): string {
-    const rootUriLength = this.workspaceService
-      .getWorkspaceRootUri(this.options.uri)
-      .toString().length;
-    return this.options.uri.toString().substring(rootUriLength + 1);
-  }
+  // getModelIDToRequest(): string {
+  //   const rootUriLength = this.workspaceService
+  //     .getWorkspaceRootUri(this.options.uri)
+  //     .toString().length;
+  //   return this.options.uri.toString().substring(rootUriLength + 1);
+  // }
 
-  getResourceUri(): URI | undefined {
-    return this.options.uri;
-  }
+  // getResourceUri(): URI | undefined {
+  //   return this.options.uri;
+  // }
 
-  createMoveToUri(resourceUri: URI): URI | undefined {
-    return this.options.uri && this.options.uri.withPath(resourceUri.path);
-  }
+  // createMoveToUri(resourceUri: URI): URI | undefined {
+  //   return this.options.uri && this.options.uri.withPath(resourceUri.path);
+  // }
 
   protected renderError(errorMessage: string): void {
     ReactDOM.render(
@@ -169,7 +169,7 @@ export abstract class JsonFormsTreeEditorWidget extends BaseWidget
   }
 
   protected setTitle(): void {
-    this.title.label = this.options.uri.path.base;
+    // this.title.label = this.options.uri.path.base;
     this.title.caption = JsonFormsTreeEditorWidget.WIDGET_LABEL;
     this.title.closable = true;
     this.title.iconClass = 'fa coffee-icon dark-purple';

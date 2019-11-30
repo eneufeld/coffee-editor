@@ -15,13 +15,9 @@
  */
 import { PreferenceSchemaProvider } from '@theia/core/lib/browser';
 import { ILogger } from '@theia/core/lib/common';
-import URI from '@theia/core/lib/common/uri';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
 import { inject, injectable } from 'inversify';
-import {
-  JsonFormsTreeEditorWidget,
-  JsonFormsTreeEditorWidgetOptions,
-} from 'jsonforms-tree-extension/lib/browser/editor/json-forms-tree-editor-widget';
+import { JsonFormsTreeEditorWidget } from 'jsonforms-tree-extension/lib/browser/editor/json-forms-tree-editor-widget';
 import { JSONFormsWidget } from 'jsonforms-tree-extension/lib/browser/editor/json-forms-widget';
 import { JsonFormsTree } from 'jsonforms-tree-extension/lib/browser/tree/json-forms-tree';
 import { AddCommandProperty, JsonFormsTreeWidget } from 'jsonforms-tree-extension/lib/browser/tree/json-forms-tree-widget';
@@ -30,8 +26,8 @@ import { AddCommandProperty, JsonFormsTreeWidget } from 'jsonforms-tree-extensio
 export class PreferencesTreeEditorWidget extends JsonFormsTreeEditorWidget {
 
   constructor(
-    @inject(JsonFormsTreeEditorWidgetOptions)
-    readonly options: JsonFormsTreeEditorWidgetOptions,
+    // @inject(JsonFormsTreeEditorWidgetOptions)
+    // readonly options: JsonFormsTreeEditorWidgetOptions,
     @inject(JsonFormsTreeWidget)
     readonly treeWidget: JsonFormsTreeWidget,
     @inject(JSONFormsWidget)
@@ -42,7 +38,6 @@ export class PreferencesTreeEditorWidget extends JsonFormsTreeEditorWidget {
     @inject(PreferenceSchemaProvider)
     protected readonly schemaProvider: PreferenceSchemaProvider) {
     super(
-      options,
       treeWidget,
       formWidget,
       workspaceService,
@@ -57,10 +52,6 @@ export class PreferencesTreeEditorWidget extends JsonFormsTreeEditorWidget {
   protected handleFormUpdate(data: any, node: JsonFormsTree.Node): void {
     // TODO implement handleFormUpdate
     // throw new Error('Method not implemented.');
-  }
-
-  public uri(): URI {
-    return this.options.uri;
   }
 
   public save(): void {

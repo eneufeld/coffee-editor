@@ -20,7 +20,7 @@ import {
   ModelServerCommandUtil,
   ModelServerReferenceDescription,
 } from '@modelserver/theia/lib/common';
-import { TreeNode } from '@theia/core/lib/browser';
+import { Navigatable, TreeNode } from '@theia/core/lib/browser';
 import { ILogger } from '@theia/core/lib/common';
 import URI from '@theia/core/lib/common/uri';
 import { WorkspaceService } from '@theia/workspace/lib/browser/workspace-service';
@@ -37,10 +37,10 @@ import { clone, isEqual } from 'lodash';
 import { CoffeeModel } from './coffee-model';
 
 @injectable()
-export class CoffeeTreeEditorWidget extends JsonFormsTreeEditorWidget {
+export class CoffeeTreeEditorWidget extends JsonFormsTreeEditorWidget implements Navigatable {
   constructor(
     @inject(JsonFormsTreeEditorWidgetOptions)
-    readonly options: JsonFormsTreeEditorWidgetOptions,
+    private readonly options: JsonFormsTreeEditorWidgetOptions,
     @inject(JsonFormsTreeWidget)
     readonly treeWidget: JsonFormsTreeWidget,
     @inject(JSONFormsWidget)
@@ -54,7 +54,6 @@ export class CoffeeTreeEditorWidget extends JsonFormsTreeEditorWidget {
     private readonly subscriptionService: ModelServerSubscriptionService
   ) {
     super(
-      options,
       treeWidget,
       formWidget,
       workspaceService,
@@ -267,6 +266,21 @@ export class CoffeeTreeEditorWidget extends JsonFormsTreeEditorWidget {
       eClass: node.jsonforms.type,
       $ref: ownerRef.replace('file:///', 'file:/')
     };
+  }
+
+  private getModelIDToRequest(): string {
+    const rootUriLength = this.workspaceService
+      .getWorkspaceRootUri(this.options.uri)
+      .toString().length;
+    return this.options.uri.toString().substring(rootUriLength + 1);
+  }
+
+  getResourceUri(): URI | undefined {
+    return this.options.uri;
+  }
+
+  createMoveToUri(resourceUri: URI): URI | undefined {
+    return this.options.uri && this.options.uri.withPath(resourceUri.path);
   }
 }
 export namespace CoffeeTreeEditorWidget {

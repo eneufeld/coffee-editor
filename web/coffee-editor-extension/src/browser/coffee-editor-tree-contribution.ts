@@ -14,7 +14,7 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  */
 import { CommandRegistry, MenuModelRegistry } from '@theia/core';
-import { ApplicationShell, OpenerService } from '@theia/core/lib/browser';
+import { ApplicationShell, NavigatableWidgetOptions, OpenerService, WidgetOpenerOptions } from '@theia/core/lib/browser';
 import URI from '@theia/core/lib/common/uri';
 import { inject, injectable } from 'inversify';
 import { JsonFormsTreeEditorWidget } from 'jsonforms-tree-extension/lib/browser/editor/json-forms-tree-editor-widget';
@@ -66,6 +66,17 @@ export class CoffeeTreeEditorContribution extends JsonFormsTreeEditorContributio
     });
 
     super.registerMenus(menus);
+  }
+
+  protected createWidgetOptions(uri: URI, options?: WidgetOpenerOptions): NavigatableWidgetOptions {
+    return {
+      kind: 'navigatable',
+      uri: this.serializeUri(uri)
+    };
+  }
+
+  protected serializeUri(uri: URI): string {
+    return uri.withoutFragment().toString();
   }
 
 }

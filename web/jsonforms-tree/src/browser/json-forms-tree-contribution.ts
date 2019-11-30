@@ -21,7 +21,7 @@ import {
     MenuContribution,
     MenuModelRegistry,
 } from '@theia/core';
-import { NavigatableWidgetOpenHandler } from '@theia/core/lib/browser';
+import { WidgetOpenHandler } from '@theia/core/lib/browser';
 
 import { JsonFormsTreeEditorWidget } from './editor/json-forms-tree-editor-widget';
 import { ModelService } from './model-service';
@@ -29,7 +29,7 @@ import { JsonFormsTree } from './tree/json-forms-tree';
 import { JsonFormsTreeAnchor, JsonFormsTreeContextMenu } from './tree/json-forms-tree-widget';
 import { generateAddCommands } from './util';
 
-export abstract class JsonFormsTreeEditorContribution extends NavigatableWidgetOpenHandler<JsonFormsTreeEditorWidget> implements CommandContribution, MenuContribution {
+export abstract class JsonFormsTreeEditorContribution extends WidgetOpenHandler<JsonFormsTreeEditorWidget> implements CommandContribution, MenuContribution {
     private commandMap: Map<string, Map<string, Command>>;
 
     constructor(private modelService: ModelService, private labelProvider: JsonFormsTree.LabelProvider) {
